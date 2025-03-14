@@ -1,31 +1,33 @@
 class Solution {
     public int maximumCandies(int[] candies, long k) {
-        int left = 1, right = 0;
-        for (int c : candies) right = Math.max(right, c); // Find max candy pile
-        long total = 0;
-        for (int c : candies) total += c;
-        if (total < k) return 0; // Not enough candies
+        long sum = 0;
+        int min = 1;
 
-        int result = 0;
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
-            if (canDistribute(candies, k, mid)) {
-                result = mid;
-                left = mid + 1; // Try larger value
+        for (int candy : candies) {
+            sum += candy;
+        }
+        
+        if (sum < k) {
+            return 0;
+        }
+
+        int max = (int) (sum / k);
+        while (min <= max) {
+            int mid = (min + max) / 2;
+            if (checkValid(candies, mid, k)) {
+                min = mid + 1;
             } else {
-                right = mid - 1; // Reduce value
+                max = mid - 1;
             }
         }
-
-        return result;
+        return max;
     }
-
-    private boolean canDistribute(int[] candies, long k, int val) {
-        long count = 0; 
-        for (int c : candies) {
-            count += c / val;
-            if (count >= k) return true;  
+        public boolean checkValid(int[] candies, int val, long m) {
+        long count = 0;
+        for (int candy : candies) {
+            count += candy / val;
         }
-        return false;
+        return count >= m;
     }
+
 }
