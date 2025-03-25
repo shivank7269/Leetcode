@@ -1,18 +1,12 @@
 class Solution {
     public int mySqrt(int x) {
-        int start=0;
-        int end=x;
-        while(start<=end){
-            int mid=start+(end-start)/2;
-            long square = (long) mid*mid; //use long to avoid overflow
-            if(square==x){
-                return mid;
-            }else if(square<x){
-                start=mid+1;
-            }else{
-                end=mid-1;
-            }
+        return sqrt(x); 
+    }
+    public static int sqrt(int n){
+        double x=n ,tol=0.00001;
+        while(Math.abs(x-n/x)>tol){
+            x=(x+n/x)/2;
         }
-        return end; //gives 
+        return (int) x;
     }
 }
