@@ -6,7 +6,7 @@ class Solution {
             int mid = (start+end)/2;
             if(nums[mid]>nums[end]){
                 start=mid+1;
-            }
+            } 
             else{
                 end=mid;
             }
