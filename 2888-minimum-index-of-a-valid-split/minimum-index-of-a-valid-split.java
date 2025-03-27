@@ -1,54 +1,36 @@
 class Solution {
     public int minimumIndex(List<Integer> nums) {
-        int dominant = findDominantElement(nums);
-        if (dominant == -1) return -1;
+        int n=nums.size();
+        int dominant=-1;
+        int cnt=0;
 
-        int leftCount = 0, totalDominantCount = 0;
-        for (int num : nums) {
-            if (num == dominant) {
-                totalDominantCount++;
+        for(int i=0;i<n;i++){
+            if(cnt==0){
+                dominant=nums.get(i);
+                cnt++;
+            }
+            else if(nums.get(i)==dominant){
+                cnt++;
+            }
+            else{
+                cnt--;
             }
         }
-
-        for (int i = 0; i < nums.size() - 1; i++) {
-            if (nums.get(i) == dominant) {
-                leftCount++;
+        int maxC=0;
+        for(int i=0;i<n;i++){
+            if(nums.get(i)==dominant){
+                maxC++;
             }
-
-            int leftSubarrayCount = leftCount;
-            int rightSubarrayCount = totalDominantCount - leftCount;
-
-            if (leftSubarrayCount > (i + 1) / 2 && 
-                rightSubarrayCount > (nums.size() - i - 1) / 2) {
+        }
+        int c=0;
+        for(int i=0;i<n;i++){
+            if(nums.get(i)==dominant){
+                c++;
+            }
+            if(c*2>(i+1) && (maxC-c)*2>(n-i-1)){
                 return i;
             }
         }
-
         return -1;
-    }
-
-    int findDominantElement(List<Integer> arr) {
-        int candidate = -1, count = 0;
-
-        // Boyer-Moore Majority Vote algorithm
-        for (int num : arr) {
-            if (count == 0) {
-                candidate = num;
-                count = 1;
-            } else if (num == candidate) {
-                count++;
-            } else {
-                count--;
-            }
-        }
-
-        int totalCount = 0;
-        for (int num : arr) {
-            if (num == candidate) {
-                totalCount++;
-            }
-        }
-
-        return (totalCount > arr.size() / 2) ? candidate : -1;
     }
 }
