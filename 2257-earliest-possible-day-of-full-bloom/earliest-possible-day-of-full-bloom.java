@@ -6,7 +6,7 @@ class Solution {
             pairs[i][0] = plantTime[i];
             pairs[i][1] = growTime[i];
         }
-        Arrays.sort(pairs, (a, b) -> b[1] - a[1]);
+        Arrays.sort(pairs, (a, b) -> Integer.compare(b[1], a[1]));
         int plantingDays = 0;
         int totalDays = 0;
         for (int[] pair : pairs) {
