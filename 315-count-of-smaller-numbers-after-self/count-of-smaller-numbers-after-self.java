@@ -1,55 +1,38 @@
-public class Solution {
-    
-    public List<Integer> countSmaller(int[] nums) {
-        int len = (nums == null? 0 : nums.length);
-        
-        int[] idxs = new int[len];
-        int[] count = new int[len];
-        
-        for (int i = 0; i < len; i++) idxs[i] = i;
-        
-        mergeSort(nums, idxs, 0, len, count);
-        
-        ArrayList<Integer> list = new ArrayList<Integer>();
-        for (int i : count) list.add(i);
-        
-        return list;
-    }
-    
-    private void mergeSort(int[] nums, int[] idxs, int start, int end, int[] count) {
-        if (start + 1 >= end) return;
-        
-        int mid = (end - start) / 2 + start;
-        mergeSort(nums, idxs, start, mid, count);
-        mergeSort(nums, idxs, mid, end, count);
-        
-        merge(nums, idxs, start, end, count);
-    }
-    
-    private void merge(int[] nums, int[] idxs, int start, int end, int[] count) {
-        int mid = (end - start) / 2 + start;
-        
-        int[] tmp = new int[end - start];
-        int[] tmpidx = new int[end - start];
-        int i = start, j = mid, k = 0;
-        while (k < end - start) {
-            if (i < mid) {
-                if (j < end && nums[j] < nums[i]) {
-                    tmpidx[k] = idxs[j];
-                    tmp[k++] = nums[j++];
-                } else {
-                    count[idxs[i]] += j - mid; // add those already counted
-                    tmpidx[k] = idxs[i];
-                    tmp[k++] = nums[i++];
-                }
-                
-            } else {
-                tmpidx[k] = idxs[j];
-                tmp[k++] = nums[j++];
+class Solution {
+
+    static final int OFFSET = 10001;           // To shift negative values to positive indices
+    static final int SIZE = 2 * OFFSET + 2;    // Total size of BIT
+
+    static class FenwickTree {
+        int[] tree = new int[SIZE];
+
+        void update(int i, int delta) {
+            while (i < SIZE) {
+                tree[i] += delta;
+                i += (i & -i);
             }
         }
-        
-        System.arraycopy(tmpidx, 0, idxs, start, end - start);
-        System.arraycopy(tmp, 0, nums, start, end - start);
+
+        int query(int i) {
+            int sum = 0;
+            while (i > 0) {
+                sum += tree[i];
+                i -= (i & -i);
+            }
+            return sum;
+        }
+    }
+
+    public static List<Integer> countSmaller(int[] nums) {
+        FenwickTree bit = new FenwickTree();
+        Integer[] result = new Integer[nums.length];
+
+        for (int i = nums.length - 1; i >= 0; i--) {
+            int mappedIndex = nums[i] + OFFSET;
+            result[i] = bit.query(mappedIndex - 1);
+            bit.update(mappedIndex, 1);
+        }
+
+        return Arrays.asList(result);
     }
 }
