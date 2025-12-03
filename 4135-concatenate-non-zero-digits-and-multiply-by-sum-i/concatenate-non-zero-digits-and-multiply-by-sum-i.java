@@ -1,17 +1,18 @@
 class Solution {
     public long sumAndMultiply(int n) {
-        String s = String.valueOf(n);      
-        String xs = "";                      
-        for(char c:s.toCharArray()){       
-            if(c!='0') xs=xs+c;
-        }
-        if(xs.equals("")) return 0;
-        long x =Integer.parseInt(xs); 
+        long x=0;
         long sum=0;
-        for(char c:xs.toCharArray()){
-            sum+=c-'0'; 
+        long digits = 1;
+        while(n>0){
+            int rem = n%10;
+            sum+=rem;           // 4 0 3
+            if(rem!=0){        // 10203004
+                x+=rem*digits; // 4 + 3 * 10
+                digits=digits*10;    //100
+            }
+            n=n/10;
         }
-        long ans = x*sum;
-        return ans;
+        return sum*x;
+        
     }
 }
