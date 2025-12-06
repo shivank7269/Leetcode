@@ -1,19 +1,16 @@
 class Solution {
     public List<Integer> findMissingElements(int[] nums) {
-        List<Integer> missing=new ArrayList<>();
+        List<Integer> lst = new ArrayList<>();
         Arrays.sort(nums);
-        int min=nums[0];
-        int max=nums[nums.length-1];
-        for(int i=min;i<=max;i++){
-            boolean found =false;
-            for(int num:nums){
-                if(num==i){
-                    found =true;
-                    break;
-                }
-            }
-            if(!found) missing.add(i);
+        int j = 0;
+        List<Integer> num = new ArrayList<>();
+        for (int n : nums) {
+            num.add(n);
         }
-        return missing;
+        for (int i = nums[0]; i < nums[nums.length - 1]; i++) {
+            if (!num.contains(i))
+                lst.add(i);
+        }
+        return lst;
     }
 }
